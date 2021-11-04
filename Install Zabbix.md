@@ -64,7 +64,6 @@ show databases;
 - Save **`PassWord`**, In next step we need it 🤣🤣
 
 
-![3 (2)](https://user-images.githubusercontent.com/83824403/140336625-2cdb277d-51d2-49cc-a23d-135b0d85009c.png)
 
 
 ```
