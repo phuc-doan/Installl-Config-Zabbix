@@ -38,6 +38,11 @@ reboot
 	yum search zabbix
 	yum install zabbix-get zabbix-agent zabbix-server-mysql zabbix-web-mysql mariadb-server -y
 ```
+
+![1 (2)](https://user-images.githubusercontent.com/83824403/140336458-8d748f8b-fdc7-453a-b67b-bdf5b633398a.png)
+
+ 
+ 
 ## Step 3🛠: When all done, we restart and enable *`Mariadb`*
 ```
 systemctl start mariadb
@@ -50,14 +55,27 @@ mysql
 	grant all privileges on zabbix.* to zabbix@localhost identified by '1';
 show databases;
 ```
+
+ ![2 (2)](https://user-images.githubusercontent.com/83824403/140336563-87f35ff5-e04d-4f44-b8af-397ebfe5d899.png)
+
+ 
+ 
 - Show database is command helpfull, it can show all database we installed 
 - Save **`PassWord`**, In next step we need it 🤣🤣
 
 
+![3 (2)](https://user-images.githubusercontent.com/83824403/140336625-2cdb277d-51d2-49cc-a23d-135b0d85009c.png)
+
+
 ```
-cd /usr/share/doc/zabbix-server-mysql-4.0.29/
+cd /usr/share/doc/zabbix-server-mysql-4.0.35/
 ls
 ```
+
+![4 (2)](https://user-images.githubusercontent.com/83824403/140336734-98f0277a-0094-46b3-aec0-8f4ca460a917.png)
+
+
+
 ### Express file **`create.sql.gz`**
 zcat create.sql.gz | mysql zabbix                   #with zabbix = user 
 ```
@@ -75,6 +93,14 @@ vi /etc/zabbix/zabbix_server.conf
 	insert:
 		DBPassword=1
 ```
+
+
+![6 (2)](https://user-images.githubusercontent.com/83824403/140336792-ef04fd6c-873e-4cb4-8dd1-2e7938705983.png)
+
+
+
+
+
 ### We havve to replace timezone to **`Asia/Ho_Chi_Minh`**
 
 - By the way, We can access file Zabbix.conf in to link **/etc/httpd/conf.d/zabbix.conf**
@@ -88,4 +114,10 @@ systemctl start zabbix-server
 systemctl enable zabbix-server
 less /var/log/zabbix/zabbix-server.log
 ```
+
+![Zabbix success (2)](https://user-images.githubusercontent.com/83824403/140336851-207c185f-8dd3-450e-9164-9baf5c315bb4.png)
+
+
 ### We're done, Now enjoy it 😍😍
+
+
