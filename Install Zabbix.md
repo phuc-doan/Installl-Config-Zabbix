@@ -1,8 +1,13 @@
 # **`==== Zabbix manual installation ====`**
 
+**Zabbix Server and Zabbix Agent**
+
 **Author:** *Doan Van Phuc* 😎😎
 
 **Date of issue**: *Nov 3th 2021*🎞🎞
+
+
+# INSTALL ZABBIX SERVER
 
 ## Step 1: `Preparing:`🔑🔑
 ```
@@ -117,6 +122,156 @@ less /var/log/zabbix/zabbix-server.log
 ![Zabbix success (2)](https://user-images.githubusercontent.com/83824403/140336851-207c185f-8dd3-450e-9164-9baf5c315bb4.png)
 
 
+
+
+# INSTALL ZABBIX AGENT
+
+
+#### ` in this instance, i create two agent: Linux centos 7 and Windows. We can use zabbix server to monitor agents `
+
+
+
+## 1) Install zabbix agent in centos 7:
+
+
+
+ *below I will guide to install Zabbix-Agent version 4.4 on CentOS 7 platform. To practice this tutorial, we are required to successfully install Zabbix Server version 4.4*
+
+
+
+## Step 1: Install zabbix agent with rpm:
+
+
+
+```
+rpm -Uvh https://repo.zabbix.com/zabbix/4.4/rhel/7/x86_64/zabbix-agent-4.4.0-1.el7.x86_64.rpm
+```
+
+
+## Step 2: Install Zabbix-agent: 
+🚗🚗
+
+```
+yum install zabbix-agent -y
+```
+
+
+## Step 3: Fix some Items in Zabbix-Agent:
+
+ - We config this file conf, the parameters below /etc/zabbix/zabbix_agentd.conf 
+
+
+```
+Server=<IP_ZABBIX_SERVER>
+ServerActive=<IP_ZABBIX_SERVER>
+Hostname=<ZABBIX_SERVER_HOSTNAME>
+```
+
+- *According to my post, the specific parameters are the agent's ip address, please correct them according to the parameters that the server can see it to connect*
+
+```
+Server=192.168.1.67
+ServerActive=192.168.1.67
+Hostname=zabbix-server-lab
+```
+
+
+![Untitled (7)](https://user-images.githubusercontent.com/83824403/141446894-2ff8fcbe-6ccb-4b73-b261-ee7296f239c9.png)
+
+
+## Step 4: Config firewalld 🔑🔑
+ 
+ **`Use this command`**
+ 
+```
+firewall-cmd --zone=public --add-port=10050/tcp --permanent
+firewall-cmd --reload
+```
+
+
+## Step 5: Restart service
+
+```
+systemctl enable zabbix-agent
+systemctl restart zabbix-agent
+```
+
+
+![Untitled (6)](https://user-images.githubusercontent.com/83824403/141446612-5f35cf0c-3757-49e7-a97d-f91d48829497.png)
+
+
+- *And done, Re-testing is absolutely necessary for the system to function properly*
+
+
+```
+zabbix_get -s <ZABBIX_AGENT_IP> -k agent.version
+```
+- follow my this zabbix agent ✔✔
+
+```
+zabbix_get -s 192.168.1.67 -k agent.version
+```
+-  if the output shows what is below it is almost successful
+
+``
+4.4.0
+``
+
+## Install zabbix agent Windowns
+
+**Similar with zabbix agent in linux, or you can refer this link :https://www.zabbix.com/documentation/1.8/manual/processes/zabbix_agentd_win***
+
+- *if same it bellow, that means we have successfully installed it. But must type correctly server's address in zabbix agent box ^ ^*🌹🌹
+
+
+![Untitled (8)](https://user-images.githubusercontent.com/83824403/141447107-a2c4536a-48bf-41c0-9c6d-b9615f5eaf39.png)
+
+
+
+## Lastest Step: Access to Server and Add agents into server
+
+😎😎
+
+- go to the server select configuration section, from there you can add the monitoring features you want
+
+-  for example monitoring the in and out of the agent's network card or setting up alert. 
+  
+-  But before we do that we need to note that: the address of the agent and the server must always be entered correctly. ❤❤
+ 
+-  When the words ZBX appear green, the agent and server have successfully 🤝🤝 shaken hands
+
+
+
+
+
+
+
+**like this picture:**
+
+
+
+
+![Untitled (9)](https://user-images.githubusercontent.com/83824403/141448361-05d36078-6e96-41a1-9dd3-41d13e7f9c94.png)
+
+
+
+
+
+
+
+
+**And we monitor some zabbix-agent'parameters**
+
+
+
+
+
+
+
+![Untitled (10)](https://user-images.githubusercontent.com/83824403/141448814-10542ff4-9472-4a17-8a26-3c5f5ab9d7c1.png)
+
+
+
 ### We're done, Now enjoy it 😍😍
 
-
+*`And in the next post in my repository, I will do a lab that connects zabbix and grafana for easy monitoring, if possible I will add Promethus`*
