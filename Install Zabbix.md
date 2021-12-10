@@ -12,14 +12,15 @@
 ## Step 1: `Preparing:`🔑🔑
 ```
 Zabbix Version:
-    4.0 LTS 
+    5.0 LTS 
 	  OS
 		CenOS 7 
 	  DataBase:
     MySQL
 ```
-The First, Run this command to stop **firewalld & Selinux**
+The First,Run this command to stop **firewalld & Selinux**
 ```
+
 systemctl stop firewalld
 systemctl disable firewalld
 ```
@@ -34,20 +35,47 @@ vi /etc/selinux/config
 
 reboot
 ```
-## Step 2: When server reboot has done, We'll load some packet install **`Zabbbix version 4.0`**
+
+## Step 2: When server reboot has done, We'll load some packet install **`Zabbbix version 5.0`**
 
 - Repo setup:
 - To load file, use **`rpm`**
 ```
-  rpm -Uvh https://repo.zabbix.com/zabbix/4.0/rhel/7/x86_64/zabbix-release-4.0-2.el7.noarch.rpm
-	yum search zabbix
+ # rpm -Uvh https://repo.zabbix.com/zabbix/5.0/rhel/7/x86_64/zabbix-release-5.0-1.el7.noarch.rpm
+# yum clean all
 	yum install zabbix-get zabbix-agent zabbix-server-mysql zabbix-web-mysql mariadb-server -y
 ```
 
 ![1 (2)](https://user-images.githubusercontent.com/83824403/140336458-8d748f8b-fdc7-453a-b67b-bdf5b633398a.png)
 
  
+  ## Install Zabbix frontend
+Documentation
+Enable Red Hat Software Collections
+```
+# yum install centos-release-scl
+```
  
+-  Edit file /etc/yum.repos.d/zabbix.repo and enable zabbix-frontend repository.
+```
+[zabbix-frontend]
+...
+enabled=1
+...
+```
+
+- Install Zabbix frontend packages.
+
+```
+# yum install zabbix-web-mysql-scl zabbix-apache-conf-scl
+```
+
+- Install Zabbix frontend
+
+
+```
+# yum install centos-release-scl
+```
 ## Step 3🛠: When all done, we restart and enable *`Mariadb`*
 ```
 systemctl start mariadb
@@ -70,24 +98,16 @@ show databases;
 
 
 
+- On Zabbix server host import initial schema and data. You will be prompted to enter **`your newly created password`**.
 
 ```
-cd /usr/share/doc/zabbix-server-mysql-4.0.35/
-ls
+# zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | mysql -uzabbix -p zabbix
 ```
 
 ![4 (2)](https://user-images.githubusercontent.com/83824403/140336734-98f0277a-0094-46b3-aec0-8f4ca460a917.png)
 
 
 
-### Express file **`create.sql.gz`**
-zcat create.sql.gz | mysql zabbix                   #with zabbix = user 
-```
-mysql
-	use zabbix;
-	show tables;
-	exit;
-```
 ## Step 5: Go to file Zabbix Config, And take note some point 🤗🤗
 ```
 vi /etc/zabbix/zabbix_server.conf
@@ -113,10 +133,12 @@ vi /etc/httpd/conf.d/zabbix.conf
 	Asia/Ho_Chi_Minh
 ```
 ## Last Step, Restart some service as Zabbix, Httpd, or check log's Zabbix
+
+- Start Zabbix server and agent processes
+- Start Zabbix server and agent processes and make it start at system boot.
 ```
-systemctl start zabbix-server	
-systemctl enable zabbix-server
-less /var/log/zabbix/zabbix-server.log
+# systemctl restart zabbix-server zabbix-agent httpd rh-php72-php-fpm
+# systemctl enable zabbix-server zabbix-agent httpd rh-php72-php-fpm
 ```
 
 ![Zabbix success (2)](https://user-images.githubusercontent.com/83824403/140336851-207c185f-8dd3-450e-9164-9baf5c315bb4.png)
